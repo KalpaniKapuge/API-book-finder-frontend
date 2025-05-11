@@ -1,10 +1,14 @@
+// Home.jsx
 import { useState } from 'react';
-import API from '../api/api';
+import { useNavigate } from 'react-router-dom';
 import BookCard from '../components/BookCard';
+import API from '../api/api';
 
 const Home = () => {
   const [query, setQuery] = useState('');
   const [books, setBooks] = useState([]);
+  const [totalBooks, setTotalBooks] = useState(0);
+  const navigate = useNavigate();
 
   const handleSearch = async () => {
     const token = localStorage.getItem('token');
@@ -14,50 +18,64 @@ const Home = () => {
     }
 
     try {
-      const res = await API.get(`/books/search?query=${encodeURIComponent(query)}`, {
+      const res = await API.get(`/books/search?query=${encodeURIComponent(query)}&page=1`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBooks(res.data);
+      setBooks(res.data.books);
+      setTotalBooks(res.data.totalBooks);
     } catch (err) {
       alert("Error searching books");
       console.error("Search error:", err.response?.data || err.message);
     }
   };
 
+  const goToAllBooks = () => {
+    navigate(`/all-books?query=${encodeURIComponent(query)}&page=2`);
+  };
+
   return (
-    <div className="bg-slate-800 min-h-screen py-24 px-6">
-    <div className="max-w-6xl mx-auto text-center bg-white/50 p-12 rounded-3xl shadow-xl border border-white/20 backdrop-blur-lg transition duration-300 hover:shadow-2xl  hover:scale-105">
+    <div className="bg-gradient-to-br from-slate-950 to-slate-800 min-h-screen py-24 px-6">
+      {/* Hero/Search Section */}
+      <div className="relative w-full max-w-6xl mx-auto text-center bg-slate-800/50 p-12 rounded-3xl shadow-[0_0_30px_rgba(0,0,0,0.3)] border border-slate-600 backdrop-blur-lg">
 
-
-        <h2 className="text-5xl sm:text-6xl font-extrabold text-slate-800 mb-6">
+        <h2 className="text-6xl font-extrabold text-slate-300 mb-6 tracking-wide">
           Discover Your Next Favorite Book 📖
         </h2>
-        <p className="text-xl text-slate-600 mb-12">
-          Search a wide range of books by title, author, or genre.
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-14">
+        <p className="text-xl text-slate-400 mb-12">Search a wide range of books by title, author, or genre.</p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
           <input
             type="text"
-            className="w-full sm:w-2/3 px-8 py-4 text-lg rounded-full border border-slate-400 bg-slate-300 focus:ring-4 focus:ring-slate-300 focus:outline-2 focus:border-slate-500 shadow-md transition-all duration-300"
+            className="w-full sm:w-2/3 px-8 py-4 text-lg rounded-full border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
             placeholder="Type a book title..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
           <button
             onClick={handleSearch}
-            className="bg-gradient-to-r from-slate-600 to-slate-800 hover:from-slate-700 hover:to-slate-900 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg transition transform hover:scale-105 duration-300"
+            className="bg-gradient-to-r cursor-pointer from-teal-500 to-teal-700 text-white px-8 py-4 rounded-full text-xl transition duration-300 transform hover:scale-105 hover:shadow-lg"
           >
-            🔍 Search
+            Search
           </button>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {books.map((book) => (
-            <BookCard key={book.bookId} book={book} />
-          ))}
-        </div>
       </div>
+
+      {/* Results */}
+      {books.length > 0 && (
+        <div className="mt-20 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+            {books.map((book) => <BookCard key={book.bookId} book={book} />)}
+          </div>
+          <div className="flex justify-center mt-10">
+           <button
+          onClick={goToAllBooks}
+          className="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white text-2xl font-bold px-8 py-4 rounded-xl shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
+        >
+          Next Page →
+        </button>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };

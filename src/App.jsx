@@ -4,6 +4,7 @@ import Wishlist from './pages/wishlist';
 import Login from './pages/login';
 import Register from './pages/register';
 import './App.css';
+import AllBooks from './pages/allBooks';
 
 function App() {
   const NavLink = ({ to, label }) => {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+           <Route path="/all-books" element={<AllBooks />} />
         </Routes>
       </div>
     </Router>
