@@ -1,22 +1,27 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import API from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../context/authContext';  // Adjust the path as needed
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);  // Get login function from context
 
   const handleLogin = async () => {
     try {
       const res = await API.post('/users/login', form);
-      localStorage.setItem('token', res.data.token);
+      const token = res.data.token;
+      localStorage.setItem('token', token);
+      login(token);  // Update context state
       toast.success('Login successful');
-      navigate('/');
+      navigate('/'); // Redirect to home or desired page
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
     }
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 to-slate-800">
       <div className="relative w-full max-w-lg p-10 bg-slate-800/50 border border-slate-600 rounded-3xl backdrop-blur-lg shadow-[0_0_30px_rgba(0,0,0,0.3)]">
