@@ -2,21 +2,21 @@ import { useState, useContext } from 'react';
 import API from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { AuthContext } from '../context/authContext';  // Adjust the path as needed
+import { AuthContext } from '../context/authContext';  
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);  // Get login function from context
+  const { login } = useContext(AuthContext);  
 
   const handleLogin = async () => {
     try {
       const res = await API.post('/users/login', form);
       const token = res.data.token;
       localStorage.setItem('token', token);
-      login(token);  // Update context state
+      login(token);  
       toast.success('Login successful');
-      navigate('/'); // Redirect to home or desired page
+      navigate('/'); 
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
     }
