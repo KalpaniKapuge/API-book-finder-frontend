@@ -14,31 +14,32 @@ function App() {
   const isLoggedIn = !!localStorage.getItem('token');
 
   const NavLink = ({ to, label, protectedLink }) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const isActive = location.pathname === to;
+  const location = useLocation();
+  const isActive = location.pathname === to;
+  const isLoggedIn = !!localStorage.getItem('token');
 
-    const handleClick = (e) => {
-      if (protectedLink && !isLoggedIn) {
-        e.preventDefault();
-        toast.info('Please login first');
-      }
-    };
-
-    return (
-      <Link
-        to={to}
-        onClick={handleClick}
-        className={`px-5 py-2.5 rounded-lg text-xl font-medium tracking-wide transition duration-300 ease-in-out shadow-sm border ${
-          isActive
-            ? 'bg-gradient-to-r from-slate-600 to-slate-800 text-white border-slate-700'
-            : 'text-slate-200 border-slate-300 hover:text-white hover:bg-gradient-to-r hover:from-slate-400 hover:to-slate-600 hover:border-transparent'
-        }`}
-      >
-        {label}
-      </Link>
-    );
+  const handleClick = (e) => {
+    if (protectedLink && !isLoggedIn) {
+      e.preventDefault();
+      toast.info('Please login first');
+    }
   };
+
+  return (
+    <Link
+      to={to}
+      onClick={handleClick}
+      className={`px-5 py-2.5 rounded-lg text-xl font-medium tracking-wide transition duration-300 ease-in-out shadow-sm border ${
+        isActive
+          ? 'bg-gradient-to-r from-slate-600 to-slate-800 text-white border-slate-700'
+          : 'text-slate-200 border-slate-300 hover:text-white hover:bg-gradient-to-r hover:from-slate-400 hover:to-slate-600 hover:border-transparent'
+      }`}
+    >
+      {label}
+    </Link>
+  );
+};
+
 
   return (
     <Router>

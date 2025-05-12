@@ -13,11 +13,11 @@ const BookCard = ({ book }) => {
 
   const addToWishlist = async (e) => {
     e.stopPropagation(); 
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!isLoggedIn) {
       toast.info("Please login to add to wishlist");
       return;
     }
+    const token = localStorage.getItem("token");
     try {
       await axios.post(
         'http://localhost:3000/api/wishlist',
@@ -43,13 +43,28 @@ const BookCard = ({ book }) => {
       <h3 className="text-2xl font-semibold text-slate-800 mb-1">{book.title}</h3>
       <p className="text-sm text-slate-600 italic mb-2">{book.authors}</p>
       <p className="text-sm text-slate-700 mb-4 line-clamp-4">{book.description}</p>
-      <button
-        type="button"
-        onClick={addToWishlist}
-        className="cursor-pointer mt-auto bg-slate-700 hover:bg-slate-900 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg transition-transform transform hover:scale-105"
-      >
-        ❤️ Add to Wishlist
-      </button>
+
+      {isLoggedIn ? (
+        <button
+          type="button"
+          onClick={addToWishlist}
+          className="cursor-pointer mt-auto bg-slate-700 hover:bg-slate-900 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg transition-transform transform hover:scale-105"
+        >
+          ❤️ Add to Wishlist
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            toast.info("Please login to add to wishlist");
+          }}
+          className="cursor-not-allowed mt-auto bg-gray-400 text-gray-700 px-6 py-2 rounded-full text-sm font-semibold shadow-lg"
+          disabled
+        >
+          ❤️ Add to Wishlist
+        </button>
+      )}
     </div>
   );
 };
