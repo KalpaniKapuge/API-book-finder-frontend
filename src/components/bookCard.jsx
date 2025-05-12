@@ -1,35 +1,40 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const BookCard = ({ book }) => {
-  const addToWishlist = async () => {
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem('token');
+
+  const handleCardClick = () => {
+    navigate(`/book/${book.bookId || book._id}`);
+  };
+
+  const addToWishlist = async (e) => {
+    e.stopPropagation(); 
     const token = localStorage.getItem("token");
-
+    if (!token) {
+      toast.info("Please login to add to wishlist");
+      return;
+    }
     try {
-      const response = await axios.post(
+      await axios.post(
         'http://localhost:3000/api/wishlist',
-        {
-          bookId: book._id,
-          title: book.title,
-          authors: book.authors,
-          description: book.description,
-          thumbnail: book.thumbnail,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { bookId: book.bookId || book._id },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      console.log("Added to wishlist:", response.data);
+      toast.success("Added to wishlist!");
     } catch (error) {
-      console.error("Error adding to wishlist:", error.response?.data || error.message);
+      toast.error(error.response?.data?.message || "Error adding to wishlist");
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-400 to-slate-200 border border-slate-300 rounded-3xl shadow-xl p-6 flex flex-col items-center text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:from-slate-200 hover:to-slate-400">
+    <div
+      onClick={handleCardClick}
+      className="cursor-pointer bg-gradient-to-br from-slate-400 to-slate-200 border border-slate-300 rounded-3xl shadow-xl p-6 flex flex-col items-center text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:from-slate-200 hover:to-slate-400"
+    >
       <img
         src={book.thumbnail}
         alt={book.title}
@@ -39,8 +44,9 @@ const BookCard = ({ book }) => {
       <p className="text-sm text-slate-600 italic mb-2">{book.authors}</p>
       <p className="text-sm text-slate-700 mb-4 line-clamp-4">{book.description}</p>
       <button
+        type="button"
         onClick={addToWishlist}
-        className="mt-auto bg-slate-700 hover:bg-slate-900 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg transition-transform transform hover:scale-105"
+        className="cursor-pointer mt-auto bg-slate-700 hover:bg-slate-900 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg transition-transform transform hover:scale-105"
       >
         ❤️ Add to Wishlist
       </button>

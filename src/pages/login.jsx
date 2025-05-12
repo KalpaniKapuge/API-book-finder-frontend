@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import API from '../api/api';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -10,18 +11,17 @@ const Login = () => {
     try {
       const res = await API.post('/users/login', form);
       localStorage.setItem('token', res.data.token);
-      alert('Login successful');
+      toast.success('Login successful');
       navigate('/');
-    } catch {
-      alert('Login failed');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Login failed');
     }
   };
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 to-slate-800">
       <div className="relative w-full max-w-lg p-10 bg-slate-800/50 border border-slate-600 rounded-3xl backdrop-blur-lg shadow-[0_0_30px_rgba(0,0,0,0.3)]">
         <h1 className="text-5xl font-bold text-white text-center mb-8 tracking-wide">
-          Sign In
+          Login
         </h1>
 
         <div className="mb-6">

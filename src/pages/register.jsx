@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import API from '../api/api';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -14,11 +15,17 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const res = await API.post('/users/register', form);
-      alert('Registration successful');
-      navigate('/login');
-    } catch {
-      alert('Registration failed');
+      await API.post('/users/register', form);
+      // Auto-login after registration
+      const res = await API.post('/users/login', {
+        email: form.email,
+        password: form.password,
+      });
+      localStorage.setItem('token', res.data.token);
+      toast.success('Registration and login successful');
+      navigate('/');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Registration failed');
     }
   };
 
@@ -69,17 +76,7 @@ const Register = () => {
           />
         </div>
 
-        <div className="mb-6">
-          <label className="block text-slate-300 text-2xl mb-2">Role</label>
-          <select
-            className="w-full px-5 py-4 text-lg bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
-            onChange={e => setForm({ ...form, role: e.target.value })}
-          >
-            <option value="" disabled selected>Select a Role</option>
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
+        
 
         <button
           onClick={handleRegister}

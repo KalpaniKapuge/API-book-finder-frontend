@@ -1,8 +1,8 @@
-// Home.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BookCard from '../components/BookCard';
+import BookCard from '../components/bookCard';
 import API from '../api/api';
+import { toast } from 'react-toastify';
 
 const Home = () => {
   const [query, setQuery] = useState('');
@@ -11,28 +11,18 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleSearch = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert("Please log in to search books.");
-      return;
-    }
-
     try {
-      const res = await API.get(`/books/search?query=${encodeURIComponent(query)}&page=1`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await API.get(`/books/search?query=${encodeURIComponent(query)}&page=1`);
       setBooks(res.data.books);
       setTotalBooks(res.data.totalBooks);
     } catch (err) {
-      alert("Error searching books");
-      console.error("Search error:", err.response?.data || err.message);
+      toast.error(err.response?.data?.message || "Error searching books");
     }
   };
 
   const goToAllBooks = () => {
     navigate(`/all-books?query=${encodeURIComponent(query)}&page=2`);
   };
-
   return (
     <div className="bg-gradient-to-br from-slate-950 to-slate-800 min-h-screen py-24 px-6">
       {/* Hero/Search Section */}
@@ -52,7 +42,7 @@ const Home = () => {
           />
           <button
             onClick={handleSearch}
-            className="bg-gradient-to-r cursor-pointer from-teal-500 to-teal-700 text-white px-8 py-4 rounded-full text-xl transition duration-300 transform hover:scale-105 hover:shadow-lg"
+            className=" cursor-pointer bg-gradient-to-r from-teal-800 to-teal-200 hover:from-teal-200 hover:to-teal-800 text-white px-8 py-4 rounded-full text-xl transition duration-300 transform hover:scale-105 hover:shadow-lg"
           >
             Search
           </button>
@@ -70,7 +60,7 @@ const Home = () => {
           onClick={goToAllBooks}
           className="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white text-2xl font-bold px-8 py-4 rounded-xl shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
         >
-          Next Page →
+          Next Page 
         </button>
 
           </div>
