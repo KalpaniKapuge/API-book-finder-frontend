@@ -60,7 +60,7 @@ const Register = () => {
           <label className="block text-slate-300 text-2xl mb-2">Email</label>
           <input
             type="email"
-            placeholder="Enter yout email address"
+            placeholder="Enter your email address"
             className="w-full px-5 py-4 text-lg bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
             onChange={e => setForm({ ...form, email: e.target.value })}
           />
