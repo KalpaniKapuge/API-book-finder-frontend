@@ -29,7 +29,7 @@ const Home = () => {
       <div className="relative w-full max-w-6xl mx-auto text-center bg-slate-800/50 p-12 rounded-3xl shadow-[0_0_30px_rgba(0,0,0,0.3)] border border-slate-600 backdrop-blur-lg">
 
         <h2 className="text-6xl font-extrabold text-slate-300 mb-6 tracking-wide">
-          Discover Your Next Favorite Book 📖
+          Explore a World of Books Just for You!
         </h2>
         <p className="text-xl text-slate-400 mb-12">Search a wide range of books by title, author, or genre.</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
