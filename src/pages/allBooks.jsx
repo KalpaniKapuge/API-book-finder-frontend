@@ -10,6 +10,7 @@ const AllBooks = () => {
   const page = parseInt(searchParams.get('page')) || 1;
 
   const [books, setBooks] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchBooks = async () => {
@@ -18,8 +19,14 @@ const AllBooks = () => {
     try {
       setIsLoading(true);
       const res = await API.get(`/books/search?query=${encodeURIComponent(query)}&page=${page}`);
-      setBooks(res.data.books || []);
+      const bookList = res.data.books || [];
+
+      setBooks(bookList);
+
+      const total = typeof res.data.totalBooks === 'number' ? res.data.totalBooks : bookList.length;
+      setTotalPages(Math.ceil(total / 9));
     } catch (err) {
+      console.error(err); // Optional: help you debug
       toast.error(err.response?.data?.message || "Failed to load books.");
     } finally {
       setIsLoading(false);
@@ -31,7 +38,7 @@ const AllBooks = () => {
   }, [page, query]);
 
   const goToPage = (newPage) => {
-    if (newPage < 1) return;
+    if (newPage < 1 || newPage > totalPages) return;
     setSearchParams({ query, page: newPage });
   };
 
@@ -60,7 +67,7 @@ const AllBooks = () => {
                 Previous Page
               </button>
             )}
-            {books.length === 9 && (
+            {page < totalPages && (
               <button
                 onClick={() => goToPage(page + 1)}
                 className="w-full cursor-pointer sm:w-auto bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white text-sm font-medium px-4 py-2 rounded-md shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
