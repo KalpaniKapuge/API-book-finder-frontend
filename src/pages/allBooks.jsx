@@ -6,19 +6,23 @@ import { toast } from 'react-toastify';
 
 const AllBooks = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('query');
+  const query = searchParams.get('query') || '';
   const page = parseInt(searchParams.get('page')) || 1;
 
   const [books, setBooks] = useState([]);
-  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchBooks = async () => {
+    if (!query.trim()) return;
+
     try {
+      setIsLoading(true);
       const res = await API.get(`/books/search?query=${encodeURIComponent(query)}&page=${page}`);
-      setBooks(res.data.books);
-      setTotalPages(Math.ceil(res.data.totalBooks / 9)); // 9 per page
+      setBooks(res.data.books || []);
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to load books.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -27,6 +31,7 @@ const AllBooks = () => {
   }, [page, query]);
 
   const goToPage = (newPage) => {
+    if (newPage < 1) return;
     setSearchParams({ query, page: newPage });
   };
 
@@ -36,7 +41,9 @@ const AllBooks = () => {
         Dive into books about <span className="italic">"{query}"</span>
       </h2>
 
-      {books.length > 0 ? (
+      {isLoading ? (
+        <p className="text-center text-lg">Loading...</p>
+      ) : books.length > 0 ? (
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {books.map((book) => (
@@ -53,7 +60,7 @@ const AllBooks = () => {
                 Previous Page
               </button>
             )}
-            {page < totalPages && (
+            {books.length === 9 && (
               <button
                 onClick={() => goToPage(page + 1)}
                 className="w-full cursor-pointer sm:w-auto bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white text-sm font-medium px-4 py-2 rounded-md shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"

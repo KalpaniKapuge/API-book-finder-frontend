@@ -68,7 +68,7 @@ const Home = () => {
           <div className="flex justify-center mt-8">
             <button
               onClick={goToAllBooks}
-              className="w-full sm:w-auto  cursor-pointer bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white text-sm font-medium px-4 py-2 rounded-md shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
+              className="w-full sm:w-auto cursor-pointer bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white text-sm font-medium px-4 py-2 rounded-md shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
             >
               See More Books
             </button>
