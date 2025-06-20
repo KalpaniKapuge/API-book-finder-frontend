@@ -16,7 +16,7 @@ const AllBooks = () => {
     try {
       const res = await API.get(`/books/search?query=${encodeURIComponent(query)}&page=${page}`);
       setBooks(res.data.books);
-      setTotalPages(Math.ceil(res.data.totalBooks / 9));
+      setTotalPages(Math.ceil(res.data.totalBooks / 9)); // 9 per page
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to load books.");
     }
@@ -32,33 +32,31 @@ const AllBooks = () => {
 
   return (
     <div className="bg-slate-900 min-h-screen p-10 text-white">
-    <h2 className="text-4xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400 drop-shadow-lg">
-      Dive into books about <span className="italic">"{query}"</span>
-    </h2>
+      <h2 className="text-4xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400 drop-shadow-lg">
+        Dive into books about <span className="italic">"{query}"</span>
+      </h2>
 
       {books.length > 0 ? (
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {books.map((book) => (
               <BookCard key={book.bookId} book={book} />
             ))}
           </div>
 
-          {/* Pagination Buttons */}
           <div className="flex justify-center gap-6 mt-12">
             {page > 1 && (
-            <button
-            onClick={() => goToPage(page - 1)}
-            className="w-full sm:w-auto bg-gradient-to-r from-orange-800 to-orange-200 hover:from-orange-200 hover:to-orange-800 text-white text-2xl font-bold px-8 py-4 rounded-xl shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
-            >
-            Previous Page
-            </button>
-
+              <button
+                onClick={() => goToPage(page - 1)}
+                className="bg-gradient-to-r cursor-pointer from-orange-800 to-orange-200 hover:from-orange-200 hover:to-orange-800 text-white text-sm font-medium px-4 py-2 rounded-md shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
+              >
+                Previous Page
+              </button>
             )}
             {page < totalPages && (
               <button
                 onClick={() => goToPage(page + 1)}
-                className="w-full sm:w-auto bg-gradient-to-r from-teal-800 to-teal-200 hover:from-teal-200 hover:to-teal-800 text-white text-2xl font-bold px-8 py-4 rounded-xl shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
+                className="w-full cursor-pointer sm:w-auto bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white text-sm font-medium px-4 py-2 rounded-md shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
               >
                 Next Page
               </button>

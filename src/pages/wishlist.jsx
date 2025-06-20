@@ -39,7 +39,8 @@ const Wishlist = () => {
             You have <span className="text-white">{wishlist.length}</span> {wishlist.length === 1 ? 'book' : 'books'} in your wishlist.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+         
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {wishlist.map(item => (
               <WishlistCard key={item._id} item={item} onRemove={handleRemove} />
             ))}
