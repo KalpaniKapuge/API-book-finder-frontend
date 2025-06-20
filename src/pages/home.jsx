@@ -26,7 +26,6 @@ const Home = () => {
 
   return (
     <div className="bg-gradient-to-br from-slate-950 to-slate-800 min-h-screen py-16 px-4">
-      {/* Hero/Search Section */}
       <div className="relative w-full max-w-4xl mx-auto text-center bg-slate-800/50 p-8 rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.3)] border border-slate-600 backdrop-blur-lg">
         <h2 className="text-3xl font-bold text-slate-300 mb-4 tracking-wide">
           Explore a World of Books Just for You!
@@ -42,14 +41,13 @@ const Home = () => {
           />
           <button
             onClick={handleSearch}
-            className="bg-gradient-to-r from-teal-800 to-teal-200 hover:from-teal-200 hover:to-teal-800 text-white px-6 py-3 rounded-full text-base transition duration-300 transform hover:scale-105 hover:shadow-lg"
+            className="bg-gradient-to-r cursor-pointer from-teal-800 to-teal-200 hover:from-teal-200 hover:to-teal-800 text-white px-6 py-3 rounded-full text-base transition duration-300 transform hover:scale-105 hover:shadow-lg"
           >
             Search
           </button>
         </div>
       </div>
 
-      {/* Results */}
       {books.length > 0 && (
         <div className="mt-12 max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -60,7 +58,7 @@ const Home = () => {
               onClick={goToAllBooks}
               className="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white text-lg font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
             >
-              Next Page 
+              Next Page
             </button>
           </div>
         </div>
