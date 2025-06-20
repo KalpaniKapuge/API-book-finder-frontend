@@ -9,7 +9,6 @@ const Register = () => {
     lastName: '',
     email: '',
     password: '',
-    role: '',
   });
   const navigate = useNavigate();
 
